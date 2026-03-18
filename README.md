@@ -1,14 +1,14 @@
-# AI OS Prototype
+# Capsule
 
 > **Sandbox-centric AI Operating System**
 > 
-> An operating system designed for AI agents, where sandboxes are first-class citizens.
+> 隔离、封装、独立单元
 
-## Design Philosophy
+## 设计哲学
 
 **Sandbox ≈ Process in Traditional OS**
 
-Just as a traditional OS manages processes, AI OS manages sandboxes - isolated execution environments for AI agents.
+正如传统操作系统管理进程，Capsule 管理沙箱 - AI Agent 的隔离执行环境。
 
 ```
 Traditional OS          AI OS
