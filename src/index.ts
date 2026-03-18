@@ -1,5 +1,5 @@
 /**
- * AI OS - Entry point
+ * Capsule - Entry point
  * 
  * Sandbox-centric AI Operating System
  */
@@ -13,6 +13,8 @@ export { SandboxManager } from "./sandbox/manager.js";
 export { WorkspaceManager } from "./sandbox/workspace.js";
 export { SandboxPool } from "./sandbox/pool.js";
 export { ProcessIsolator } from "./sandbox/isolation/process.js";
+export { DockerIsolator } from "./sandbox/isolation/docker.js";
+export { CheckpointManager } from "./sandbox/checkpoint.js";
 
 // Scheduler
 export { Scheduler } from "./scheduler/scheduler.js";
@@ -31,34 +33,45 @@ export { SessionStore } from "./session/store.js";
 // Memory
 export { MemoryManager } from "./memory/manager.js";
 
+// Telemetry
+export { TelemetryManager } from "./telemetry/index.js";
+
+// Gateway
+export { Gateway } from "./gateway/index.js";
+
 // Utils
 export { logger } from "./utils/logger.js";
 export * from "./utils/errors.js";
 
 /**
- * Create an AI OS instance
+ * Create a Capsule instance
  */
 import { SandboxManager } from "./sandbox/manager.js";
 import { Scheduler } from "./scheduler/scheduler.js";
 import { ToolRegistry } from "./tools/registry.js";
 import { SessionStore } from "./session/store.js";
 import { MemoryManager } from "./memory/manager.js";
+import { TelemetryManager } from "./telemetry/index.js";
+import { Gateway } from "./gateway/index.js";
 import { builtInTools } from "./tools/builtins/index.js";
 
-export interface AIOSConfig {
+export interface CapsuleConfig {
   workspaceRoot: string;
   maxSandboxes: number;
   maxConcurrent: number;
+  gatewayPort?: number;
 }
 
-export class AIOS {
+export class Capsule {
   public readonly sandboxManager: SandboxManager;
   public readonly scheduler: Scheduler;
   public readonly toolRegistry: ToolRegistry;
   public readonly sessionStore: SessionStore;
   public readonly memoryManager: MemoryManager;
+  public readonly telemetry: TelemetryManager;
+  public readonly gateway?: Gateway;
 
-  constructor(config: AIOSConfig) {
+  constructor(config: CapsuleConfig) {
     // Initialize components
     this.sandboxManager = new SandboxManager({
       workspaceRoot: config.workspaceRoot,
@@ -76,6 +89,19 @@ export class AIOS {
     this.memoryManager = new MemoryManager({
       workspacePath: config.workspaceRoot,
     });
+    this.telemetry = new TelemetryManager();
+
+    // Initialize gateway if port is specified
+    if (config.gatewayPort) {
+      this.gateway = new Gateway(
+        this.sandboxManager,
+        this.scheduler,
+        this.toolRegistry,
+        this.sessionStore,
+        this.telemetry,
+        { port: config.gatewayPort }
+      );
+    }
 
     // Register built-in tools
     for (const tool of builtInTools) {
@@ -84,29 +110,34 @@ export class AIOS {
   }
 
   /**
-   * Start the AI OS
+   * Start Capsule
    */
   async start(): Promise<void> {
     await this.scheduler.start();
+    await this.gateway?.start();
   }
 
   /**
-   * Stop the AI OS
+   * Stop Capsule
    */
   async stop(): Promise<void> {
+    await this.gateway?.stop();
     await this.scheduler.stop();
   }
 }
 
 /**
- * Create an AI OS instance with default configuration
+ * Create a Capsule instance with default configuration
  */
-export function createAIOS(
-  workspaceRoot: string = "./workspace"
-): AIOS {
-  return new AIOS({
+export function createCapsule(
+  workspaceRoot: string = "./workspace",
+  options: Partial<CapsuleConfig> = {}
+): Capsule {
+  return new Capsule({
     workspaceRoot,
     maxSandboxes: 100,
     maxConcurrent: 10,
+    gatewayPort: 18789,
+    ...options,
   });
 }
