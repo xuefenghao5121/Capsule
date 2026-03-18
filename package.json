@@ -1,0 +1,31 @@
+{
+  "name": "ai-os-prototype",
+  "version": "0.1.0",
+  "description": "AI OS Prototype - Sandbox-centric design",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^9.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0",
+    "tsx": "^4.19.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
