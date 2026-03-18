@@ -4,15 +4,15 @@
  * Analogous to Process Scheduler in traditional OS
  */
 
-import { Task, TaskId, TaskStatus, TaskType } from "../types/task.js";
+import { Task, TaskStatus, TaskType } from "../types/task.js";
 import {
-  Sandbox,
   SandboxId,
   SandboxStatus,
   Priority,
   ResourceRequest,
   PreemptReason,
 } from "../types/sandbox.js";
+import { Sandbox } from "../sandbox/sandbox.js";
 import { SandboxManager } from "../sandbox/manager.js";
 import { SandboxPool } from "../sandbox/pool.js";
 import { TaskQueue } from "./queue.js";

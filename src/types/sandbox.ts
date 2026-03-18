@@ -56,6 +56,17 @@ export enum Priority {
 }
 
 /**
+ * Preemption Reason
+ */
+export enum PreemptReason {
+  HIGHER_PRIORITY = "higher_priority",
+  RESOURCE_EXHAUSTION = "resource_exhaustion",
+  QUOTA_EXCEEDED = "quota_exceeded",
+  ERROR = "error",
+  MANUAL = "manual",
+}
+
+/**
  * Risk Level for Tools
  */
 export enum RiskLevel {

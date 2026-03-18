@@ -2,7 +2,9 @@
  * Task Types - Work unit for sandbox execution
  */
 
-import { SandboxId, TaskId } from "./sandbox.js";
+import { SandboxId } from "./sandbox.js";
+
+export type TaskId = string;
 
 /**
  * Task Type
