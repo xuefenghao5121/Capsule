@@ -39,6 +39,17 @@ export { TelemetryManager } from "./telemetry/index.js";
 // Gateway
 export { Gateway } from "./gateway/index.js";
 
+// Tenant
+export { TenantManager } from "./tenant/manager.js";
+export type { TenantConfig, TenantQuota, TenantUsage, TenantId } from "./tenant/manager.js";
+
+// Health
+export { HealthChecker, createLivenessProbe, createReadinessProbe } from "./health/index.js";
+export type { HealthStatus, ComponentHealth, SystemHealth } from "./health/index.js";
+
+// Performance
+export { Cache, RateLimiter, ObjectPool, debounce, throttle } from "./perf/index.js";
+
 // Utils
 export { logger } from "./utils/logger.js";
 export * from "./utils/errors.js";
