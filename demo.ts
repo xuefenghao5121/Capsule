@@ -9,6 +9,7 @@ import { SessionStore } from "./src/session/store.js";
 import { TelemetryManager } from "./src/telemetry/index.js";
 import { IsolationLevel, Priority, SandboxStatus } from "./src/types/sandbox.js";
 import { TaskType, TaskStatus } from "./src/types/task.js";
+import { builtInTools } from "./src/tools/builtins/index.js";
 
 async function main() {
   console.log("🚀 Capsule Demo - Local Test\n");
@@ -26,6 +27,12 @@ async function main() {
   });
 
   const toolRegistry = new ToolRegistry();
+  
+  // Register built-in tools
+  for (const tool of builtInTools) {
+    toolRegistry.register(tool);
+  }
+  
   const sessionStore = new SessionStore({
     dataPath: "./demo-workspace/sessions",
     maxSessions: 100,
